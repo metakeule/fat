@@ -1,0 +1,23 @@
+{
+  "github.com/metakeule/fmtdate": {
+    "VCM": "git",
+    "Rev": "3a581709385e389a529a7dec33dc7940b59eafc0",
+    "Parent": "github.com/metakeule/fat",
+    "Tag": "",
+    "RepoRoot": "github.com/metakeule/fmtdate"
+  },
+  "github.com/metakeule/meta": {
+    "VCM": "git",
+    "Rev": "0b2ebfb00f8a4ac62c0d9b20d401ca45a9a95821",
+    "Parent": "github.com/metakeule/fat",
+    "Tag": "",
+    "RepoRoot": "github.com/metakeule/meta"
+  },
+  "github.com/metakeule/nil": {
+    "VCM": "git",
+    "Rev": "6ac52852e5ede6a8826ce81d934581585ff16a9d",
+    "Parent": "github.com/metakeule/fat",
+    "Tag": "",
+    "RepoRoot": "github.com/metakeule/nil"
+  }
+}

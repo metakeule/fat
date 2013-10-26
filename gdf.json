@@ -1,0 +1,42 @@
+{
+  "Exports": {
+    "*Field.Get": "(*Field) Get() interface{}",
+    "*Field.IsValid": "(*Field) IsValid() bool",
+    "*Field.MustScan": "(*Field) MustScan(string)",
+    "*Field.MustSet": "(*Field) MustSet(interface{})",
+    "*Field.Scan": "(*Field) Scan(string) error",
+    "*Field.Set": "(*Field) Set(interface{}) error",
+    "*Field.String": "(*Field) String() string",
+    "*Field.Validate": "(*Field) Validate() []error",
+    "Bool": "func (bool) *bool_",
+    "Bools": "func (...interface{}) *slice",
+    "Field": "type Field struct { Type; IsSet bool}",
+    "Float": "func (float64) *float_",
+    "Floats": "func (...interface{}) *slice",
+    "Int": "func (int64) *int_",
+    "Ints": "func (...interface{}) *slice",
+    "Map": "func (string,...interface{}) *map_",
+    "MapBools": "func (...interface{}) *map_",
+    "MapFloats": "func (...interface{}) *map_",
+    "MapInts": "func (...interface{}) *map_",
+    "MapStrings": "func (...interface{}) *map_",
+    "MapTimes": "func (...interface{}) *map_",
+    "New": "func (interface{},interface{}) interface{}",
+    "Slice": "func (string,...interface{}) *slice",
+    "String": "func (string) *string_",
+    "Strings": "func (...interface{}) *slice",
+    "Struct": "func (interface{}) interface{}",
+    "Time": "func (time.Time) *time_",
+    "Times": "func (...interface{}) *slice",
+    "Type": "type Type interface {Get() interface{}; Scan(string) error; Set(interface{}) error; String() string; Typ() string}",
+    "init": ""
+  },
+  "Imports": {
+    "github.com/metakeule/fmtdate.Format": "func (string,time.Time) string",
+    "github.com/metakeule/fmtdate.Parse": "func (string,string)(time.Time,error)",
+    "github.com/metakeule/fmtdate.init": "",
+    "github.com/metakeule/meta.init": "",
+    "github.com/metakeule/nil.init": ""
+  },
+  "Path": "github.com/metakeule/fat"
+}
