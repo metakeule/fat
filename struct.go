@@ -11,7 +11,7 @@ import (
 // to a *Field with the Type set to what is given in the tag "fat.type"
 // with defaults set to what is given in the tag "fat.default"
 // and with enums set to what is in the tag "fat.enum", separated by pipe symbols (|)
-func Struct(østruct interface{}) (østru interface{}) {
+func Proto(østruct interface{}) (østru interface{}) {
 	structtype := reflect.TypeOf(østruct).String()
 	fn := func(field reflect.StructField, val reflect.Value) {
 		if _, ok := val.Interface().(*Field); ok {

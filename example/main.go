@@ -4,33 +4,10 @@ import (
 	"fmt"
 	"github.com/metakeule/fat"
 	"github.com/metakeule/fmtdate"
-	"github.com/metakeule/meta"
 	"github.com/metakeule/templ"
+	. "github.com/metakeule/templ/fat"
 	"time"
 )
-
-// shortcuts to get placeholders out of fat fields
-func Placeholder(øField *fat.Field) templ.Placeholder {
-	return templ.NewPlaceholder(øField.Path())
-}
-
-func Setter(øField *fat.Field) templ.Setter {
-	t := templ.NewPlaceholder(øField.Path())
-	t.Value = øField.String()
-	return t
-}
-
-func Setters(østruct interface{}) []templ.Setter {
-	phs := []templ.Setter{}
-	fn := func(field string, val interface{}) {
-		f, ok := val.(*fat.Field)
-		if ok {
-			phs = append(phs, Setter(f))
-		}
-	}
-	meta.Struct.Each(østruct, fn)
-	return phs
-}
 
 type (
 	Person struct {
@@ -49,8 +26,8 @@ type (
 var (
 	// prototype of a Person, used to get field infos, like placeholders
 	// and to create new
-	PERSON  = fat.Struct(&Person{}).(*Person)
-	details = templ.New("details").MustAdd("DETAILS\n",
+	PERSON  = fat.Proto(&Person{}).(*Person)
+	details = templ.New("details").MustAdd("\n--------------\nDETAILS",
 		"\nThe first name: ", Placeholder(PERSON.FirstName),
 		"\nThe last name: ", Placeholder(PERSON.LastName),
 		"\nThe age: ", Placeholder(PERSON.Age),
@@ -60,7 +37,7 @@ var (
 		"\nThe birthday: ", Placeholder(PERSON.Birthday),
 		"\nThe datings: ", Placeholder(PERSON.Datings),
 		"\nThe meetings: ", Placeholder(PERSON.Meetings),
-		"\n").MustParse()
+		"\n-------------\n\n").MustParse()
 )
 
 // use fat.New to create a new Person and have the field informations
