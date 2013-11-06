@@ -52,7 +52,8 @@ func (ømap *map_) Scan(n string) error {
 	for k, v := range _map {
 		t := newType(ømap.typ)
 		var e error
-		if ømap.typ == "int" {
+		switch ømap.typ {
+		case "int":
 			switch vt := v.(type) {
 			case float64:
 				e = t.Set(int64(vt))
@@ -61,9 +62,12 @@ func (ømap *map_) Scan(n string) error {
 			default:
 				e = fmt.Errorf("can't convert %#v (%T) to int", v)
 			}
-		} else {
+		case "time":
+			e = t.Scan(v.(string))
+		default:
 			e = t.Set(v)
 		}
+
 		if e != nil {
 			return e
 		}

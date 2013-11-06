@@ -1,6 +1,7 @@
 package fat
 
 import (
+	"encoding/json"
 	"fmt"
 )
 
@@ -38,6 +39,33 @@ func (øField *Field) Set(i interface{}) error {
 func (øField *Field) IsValid() bool {
 	errs := øField.Validate()
 	return !(len(errs) > 0)
+}
+
+func (øField *Field) MarshalJSON() ([]byte, error) {
+	switch øField.Type.(type) {
+	case *slice:
+		return []byte(øField.String()), nil
+	case *map_:
+		return []byte(øField.String()), nil
+	case *time_:
+		return json.Marshal(øField.String())
+	default:
+		return json.Marshal(øField.Get())
+	}
+}
+
+func (øField *Field) UnmarshalJSON(data []byte) (err error) {
+	var target string
+	switch øField.Type.(type) {
+	case *string_, *time_:
+		err = json.Unmarshal(data, &target)
+	default:
+		target = string(data)
+	}
+	if err == nil {
+		err = øField.Scan(target)
+	}
+	return
 }
 
 // overwrite Type.String to return default value, if IsSet is false

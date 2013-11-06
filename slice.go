@@ -3,6 +3,7 @@ package fat
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 )
 
 // for more complex types
@@ -55,7 +56,8 @@ func (øslice *slice) Scan(s string) error {
 	for i, v := range intfSlice {
 		t := newType(øslice.typ)
 		var e error
-		if øslice.typ == "int" {
+		switch øslice.typ {
+		case "int":
 			switch vt := v.(type) {
 			case float64:
 				e = t.Set(int64(vt))
@@ -64,9 +66,12 @@ func (øslice *slice) Scan(s string) error {
 			default:
 				e = fmt.Errorf("can't convert %#v (%T) to int", v)
 			}
-		} else {
+		case "time":
+			e = t.Scan(v.(string))
+		default:
 			e = t.Set(v)
 		}
+
 		if e != nil {
 			return e
 		}
@@ -89,8 +94,30 @@ func Slice(typ string, intfs ...interface{}) *slice {
 	return &slice{typ: typ, Slice: types}
 }
 
-func Strings(params ...interface{}) *slice { return Slice("string", params...) }
-func Ints(params ...interface{}) *slice    { return Slice("int", params...) }
-func Floats(params ...interface{}) *slice  { return Slice("float", params...) }
-func Bools(params ...interface{}) *slice   { return Slice("bool", params...) }
-func Times(params ...interface{}) *slice   { return Slice("time", params...) }
+func Strings(strings ...string) *slice {
+	params := make([]interface{}, len(strings))
+	for i, s := range strings {
+		params[i] = s
+	}
+	return Slice("string", params...)
+}
+func Ints(params ...interface{}) *slice {
+	return Slice("int", params...)
+}
+func Floats(params ...interface{}) *slice {
+	return Slice("float", params...)
+}
+func Bools(bools ...bool) *slice {
+	params := make([]interface{}, len(bools))
+	for i, b := range bools {
+		params[i] = b
+	}
+	return Slice("bool", params...)
+}
+func Times(times ...time.Time) *slice {
+	params := make([]interface{}, len(times))
+	for i, t := range times {
+		params[i] = t
+	}
+	return Slice("time", params...)
+}

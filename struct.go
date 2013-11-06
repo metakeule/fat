@@ -7,12 +7,17 @@ import (
 	"strings"
 )
 
+func StructType(østruct interface{}) string {
+	ty := reflect.TypeOf(østruct).Elem()
+	return "*" + ty.PkgPath() + "." + ty.Name()
+}
+
 // sets all attributes of a struct that are of type *Field
 // to a *Field with the Type set to what is given in the tag "fat.type"
 // with defaults set to what is given in the tag "fat.default"
 // and with enums set to what is in the tag "fat.enum", separated by pipe symbols (|)
 func Proto(østruct interface{}) (østru interface{}) {
-	structtype := reflect.TypeOf(østruct).String()
+	structtype := StructType(østruct)
 	fn := func(field reflect.StructField, val reflect.Value) {
 		if _, ok := val.Interface().(*Field); ok {
 			ty := field.Tag.Get("fat.type")

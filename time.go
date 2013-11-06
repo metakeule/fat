@@ -8,7 +8,7 @@ import (
 
 var (
 	zeroTime, _ = time.Parse(time.UnixDate, time.UnixDate)
-	timeFormat  = "DD.MM.YYYY hh:mm:ss"
+	timeFormat  = "YYYY-MM-DD hh:mm:ss"
 )
 
 type time_ time.Time
