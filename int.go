@@ -9,8 +9,8 @@ type int_ int64
 
 func Int(i int64) *int_         { i_ := int_(i); return &i_ }
 func (i int_) Typ() string      { return "int" }
-func (i int_) Get() interface{} { return i }
-func (i int_) String() string   { return fmt.Sprintf("%v", int(i)) }
+func (i int_) Get() interface{} { return int64(i) }
+func (i int_) String() string   { return fmt.Sprintf("%v", int64(i)) }
 
 func (øi *int_) Scan(s string) error {
 	i, err := strconv.Atoi(s)

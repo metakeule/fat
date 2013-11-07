@@ -82,6 +82,7 @@ func (øslice *slice) Scan(s string) error {
 
 // panics if there are different types
 func Slice(typ string, intfs ...interface{}) *slice {
+	mustBeUTF8(typ)
 	types := make([]Type, len(intfs))
 	for i, intf := range intfs {
 		t := newType(typ)
@@ -101,10 +102,18 @@ func Strings(strings ...string) *slice {
 	}
 	return Slice("string", params...)
 }
-func Ints(params ...interface{}) *slice {
+func Ints(ints ...int64) *slice {
+	params := make([]interface{}, len(ints))
+	for i, b := range ints {
+		params[i] = b
+	}
 	return Slice("int", params...)
 }
-func Floats(params ...interface{}) *slice {
+func Floats(floats ...float64) *slice {
+	params := make([]interface{}, len(floats))
+	for i, b := range floats {
+		params[i] = b
+	}
 	return Slice("float", params...)
 }
 func Bools(bools ...bool) *slice {

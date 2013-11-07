@@ -78,6 +78,7 @@ func (ømap *map_) Scan(n string) error {
 
 // panics if there are different types
 func Map(typ string, vals ...interface{}) *map_ {
+	mustBeUTF8(typ)
 	if len(vals)%2 != 0 {
 		panic(fmt.Sprintf("map must be given pairs of string interface, len is odd: %v", vals))
 	}
@@ -87,6 +88,7 @@ func Map(typ string, vals ...interface{}) *map_ {
 		if !ok {
 			panic(fmt.Sprintf("is no string %#v (%T)", vals[i], vals[i]))
 		}
+		mustBeUTF8(k)
 		v := vals[i+1]
 		t := newType(typ)
 		e := t.Set(v)

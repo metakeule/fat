@@ -26,7 +26,7 @@ func (øfieldSpec *fieldSpec) Path() string {
 }
 
 func (øfieldSpec *fieldSpec) New() *Field {
-	return &Field{øfieldSpec.new(), øfieldSpec, false}
+	return &Field{øfieldSpec.new(), øfieldSpec, false, ""}
 }
 
 // creates a new Field based on a spec that is created by the way

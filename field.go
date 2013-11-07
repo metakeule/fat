@@ -8,7 +8,10 @@ import (
 type Field struct {
 	Type
 	*fieldSpec
-	IsSet bool // is true, if the value was set, may be faked
+	IsSet bool // is true, if the value was set, i.e. the type was correct, it may however by invalid
+	// saves the input for a failed scan,
+	// is empty if the scan did not fail
+	FailedScanInput string
 	// not sure if this is neccessary
 	// Struct                interface{}
 }
@@ -22,13 +25,14 @@ func (øField *Field) MustSet(i interface{}) {
 }
 
 // overwrite Type.Set to track, if the field was set
+// field may be set and invalid at the same time
+// IsSet only tells us, wether the type is correct
 func (øField *Field) Set(i interface{}) error {
-	øField.IsSet = true
-
 	err := øField.Type.Set(i)
 	if err != nil {
 		return err
 	}
+	øField.IsSet = true
 	if !øField.IsValid() {
 		return fmt.Errorf("validation errors, run Validate() for specific errors")
 	}
@@ -77,16 +81,31 @@ func (øField *Field) String() string {
 }
 
 // overwrite Type.Scan to track, if the field was set
+// field only is set if scan was successful
+// Scan does not validation check, that must be run after
+// Scan, or use ScanAndValidate
 func (øField *Field) Scan(s string) error {
-	øField.IsSet = true
+	if err := shouldBeUTF8(s); err != nil {
+		return err
+	}
+	øField.FailedScanInput = s
 	err := øField.Type.Scan(s)
 	if err != nil {
 		return err
 	}
-	if !øField.IsValid() {
-		return fmt.Errorf("validation errors, run Validate() for specific errors")
-	}
+	øField.IsSet = true
+	øField.FailedScanInput = ""
 	return nil
+}
+
+func (øField *Field) ScanAndValidate(s string) (errs []error) {
+	errs = []error{}
+	err := øField.Scan(s)
+	if err != nil {
+		errs = append(errs, err)
+	}
+	errs = append(errs, øField.Validate()...)
+	return
 }
 
 // calls Scan and panics if there is an error
@@ -97,12 +116,25 @@ func (øField *Field) MustScan(s string) {
 	}
 }
 
+func (øField *Field) MustScanAndValidate(s string) {
+	øField.MustScan(s)
+	øField.MustValidate()
+}
+
 // overwrite Type.Get to return default value, if IsSet is false
 func (øField *Field) Get() (i interface{}) {
 	if øField.default_ != nil && !øField.IsSet {
 		return øField.default_.Get()
 	}
 	return øField.Type.Get()
+}
+
+// panics on first error
+func (øField *Field) MustValidate() {
+	errs := øField.Validate()
+	if len(errs) > 0 {
+		panic(errs[0])
+	}
 }
 
 // validates the content of field and returns all errors
