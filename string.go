@@ -7,8 +7,9 @@ import (
 
 func shouldBeUTF8(s string) error {
 	if !utf8.ValidString(s) {
-		return fmt.Errorf("%+q is not a valid utf8 string", i)
+		return fmt.Errorf("%+q is not a valid utf8 string", s)
 	}
+	return nil
 }
 
 func mustBeUTF8(s string) {
