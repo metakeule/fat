@@ -3,6 +3,7 @@ package fat
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 )
 
 type map_ struct {
@@ -76,8 +77,78 @@ func (ømap *map_) Scan(n string) error {
 	return nil
 }
 
+func mustSetTypeForMap(_map map[string]Type, typ string, k string, v interface{}) {
+	mustBeUTF8(k)
+	t := newType(typ)
+	e := t.Set(v)
+	if e != nil {
+		panic(fmt.Sprintf("can't set %#v (%T) to %s", v, v, typ))
+	}
+	_map[k] = t
+}
+
+func Map(givenmap interface{}) *map_ {
+	_map := map[string]Type{}
+	var typ string
+	switch m := givenmap.(type) {
+	case map[string]string:
+		typ = "string"
+		for k, v := range m {
+			mustSetTypeForMap(_map, typ, k, v)
+		}
+	case map[string]int8:
+		typ = "int"
+		for k, v := range m {
+			mustSetTypeForMap(_map, typ, k, v)
+		}
+	case map[string]int16:
+		typ = "int"
+		for k, v := range m {
+			mustSetTypeForMap(_map, typ, k, v)
+		}
+	case map[string]int32:
+		typ = "int"
+		for k, v := range m {
+			mustSetTypeForMap(_map, typ, k, v)
+		}
+	case map[string]int64:
+		typ = "int"
+		for k, v := range m {
+			mustSetTypeForMap(_map, typ, k, v)
+		}
+	case map[string]int:
+		typ = "int"
+		for k, v := range m {
+			mustSetTypeForMap(_map, typ, k, v)
+		}
+	case map[string]float64:
+		typ = "float"
+		for k, v := range m {
+			mustSetTypeForMap(_map, typ, k, v)
+		}
+	case map[string]float32:
+		typ = "float"
+		for k, v := range m {
+			mustSetTypeForMap(_map, typ, k, v)
+		}
+	case map[string]bool:
+		typ = "bool"
+		for k, v := range m {
+			mustSetTypeForMap(_map, typ, k, v)
+		}
+	case map[string]time.Time:
+		typ = "time"
+		for k, v := range m {
+			mustSetTypeForMap(_map, typ, k, v)
+		}
+	default:
+		panic(fmt.Sprintf("unsupported type: %T", givenmap))
+	}
+	return &map_{typ: typ, Map: _map}
+}
+
 // panics if there are different types
-func Map(typ string, vals ...interface{}) *map_ {
+func mapp(typ string, vals ...interface{}) *map_ {
 	mustBeUTF8(typ)
 	if len(vals)%2 != 0 {
 		panic(fmt.Sprintf("map must be given pairs of string interface, len is odd: %v", vals))
@@ -100,8 +171,8 @@ func Map(typ string, vals ...interface{}) *map_ {
 	return &map_{typ: typ, Map: _map}
 }
 
-func MapStrings(params ...interface{}) *map_ { return Map("string", params...) }
-func MapInts(params ...interface{}) *map_    { return Map("int", params...) }
-func MapFloats(params ...interface{}) *map_  { return Map("float", params...) }
-func MapBools(params ...interface{}) *map_   { return Map("bool", params...) }
-func MapTimes(params ...interface{}) *map_   { return Map("time", params...) }
+func MapStrings(params ...interface{}) *map_ { return mapp("string", params...) }
+func MapInts(params ...interface{}) *map_    { return mapp("int", params...) }
+func MapFloats(params ...interface{}) *map_  { return mapp("float", params...) }
+func MapBools(params ...interface{}) *map_   { return mapp("bool", params...) }
+func MapTimes(params ...interface{}) *map_   { return mapp("time", params...) }

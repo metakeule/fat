@@ -7,6 +7,7 @@ import (
 
 type Field struct {
 	Type
+	Struct interface{} // a reference to the struct
 	*fieldSpec
 	IsSet bool // is true, if the value was set, i.e. the type was correct, it may however by invalid
 	// saves the input for a failed scan,

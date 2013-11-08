@@ -25,7 +25,7 @@ func Proto(østruct interface{}) (østru interface{}) {
 				panic(fmt.Sprintf("struct %s has no fat.type tag for field %s", structtype, field.Name))
 			}
 
-			f := newSpec(structtype, field.Name, ty)
+			f := newSpec(structtype, østruct, field.Name, ty)
 			def := field.Tag.Get("fat.default")
 			if def != "" {
 				d := f.fieldSpec.new()
@@ -72,7 +72,7 @@ func New(øprototype interface{}, ønewstruct interface{}) (ønew interface{}) {
 				reflect.ValueOf(
 					proto.FieldByName(field.Name).
 						Interface().(*Field).
-						New(),
+						New(ønewstruct),
 				),
 			)
 		}

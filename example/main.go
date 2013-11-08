@@ -55,7 +55,7 @@ func main() {
 	peter.Votes.MustSet(fat.MapInts("Mary", 3, "Paul", 2))
 	peter.Birthday.Set(bday)
 	peter.Datings.Set(fat.Times(now, now.Add(2*time.Hour)))
-	peter.Meetings.Set(fat.MapTimes("Paul", now.Add(5*time.Hour), "Mary", now.Add(7*time.Hour)))
+	peter.Meetings.Set(fat.MapTimes("Paul", now.Add(5*time.Hour)))
 	peter.FieldsOfInterest.MustSet(fat.Strings("cooking", "swimming"))
 
 	paul := NewPerson()
@@ -65,6 +65,10 @@ func main() {
 	paul.Age.MustScan("53")
 	paul.Points.MustSet(fat.Floats(1.0, 2.3))
 	paul.Votes.MustScan(`{"Peter": 45}`)
+	paul.Meetings.Set(fat.Map(map[string]time.Time{
+		"Peter": now.Add(5 * time.Hour),
+		"Mary":  now.Add(7 * time.Hour),
+	}))
 
 	fmt.Printf("%s: %s is set? %v\n", peter.FirstName.Name(), peter.FirstName, peter.FirstName.IsSet)
 	fmt.Printf("%s: %s is set? %v\n", peter.Age.Name(), peter.Age, peter.Age.IsSet)
