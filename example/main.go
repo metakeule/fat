@@ -52,10 +52,10 @@ func main() {
 	peter.FirstName.MustSet("Peter")
 	peter.Points.MustScan(`[2,3,4.5]`)
 	peter.LastName.MustScan("Pan")
-	peter.Votes.MustSet(fat.MapInts("Mary", 3, "Paul", 2))
+	peter.Votes.MustSet(fat.MapType("int", "Mary", 3, "Paul", 2))
 	peter.Birthday.Set(bday)
 	peter.Datings.Set(fat.Times(now, now.Add(2*time.Hour)))
-	peter.Meetings.Set(fat.MapTimes("Paul", now.Add(5*time.Hour)))
+	peter.Meetings.Set(fat.MapType("time", "Paul", now.Add(5*time.Hour)))
 	peter.FieldsOfInterest.MustSet(fat.Strings("cooking", "swimming"))
 
 	paul := NewPerson()

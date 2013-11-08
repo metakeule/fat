@@ -147,9 +147,20 @@ func Map(givenmap interface{}) *map_ {
 	return &map_{typ: typ, Map: _map}
 }
 
+var mapTypes = map[string]bool{
+	"string": true,
+	"int":    true,
+	"float":  true,
+	"bool":   true,
+	"time":   true,
+}
+
 // panics if there are different types
-func mapp(typ string, vals ...interface{}) *map_ {
+func MapType(typ string, vals ...interface{}) *map_ {
 	mustBeUTF8(typ)
+	if !mapTypes[typ] {
+		panic("unsupported type: " + typ)
+	}
 	if len(vals)%2 != 0 {
 		panic(fmt.Sprintf("map must be given pairs of string interface, len is odd: %v", vals))
 	}
@@ -171,8 +182,8 @@ func mapp(typ string, vals ...interface{}) *map_ {
 	return &map_{typ: typ, Map: _map}
 }
 
-func MapStrings(params ...interface{}) *map_ { return mapp("string", params...) }
-func MapInts(params ...interface{}) *map_    { return mapp("int", params...) }
-func MapFloats(params ...interface{}) *map_  { return mapp("float", params...) }
-func MapBools(params ...interface{}) *map_   { return mapp("bool", params...) }
-func MapTimes(params ...interface{}) *map_   { return mapp("time", params...) }
+func MapStrings(m map[string]string) *map_  { return Map(m) }
+func MapInts(m map[string]int64) *map_      { return Map(m) }
+func MapFloats(m map[string]float64) *map_  { return Map(m) }
+func MapBools(m map[string]bool) *map_      { return Map(m) }
+func MapTimes(m map[string]time.Time) *map_ { return Map(m) }
